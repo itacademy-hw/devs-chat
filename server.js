@@ -1,8 +1,12 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const jwt = require('jsonwebtoken');
+const cors = require('cors');
 
 // create express app
 const app = express();
+
+app.use(cors());
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -30,6 +34,8 @@ mongoose.connect(dbConfig.url, {
 app.get('/', (req, res) => {
     res.json({"message": "Welcome to Dev chat application."});
 });
+
+require('./app/routes/user')(app);
 
 // listen for requests
 app.listen(3000, () => {
