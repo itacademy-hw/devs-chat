@@ -50,17 +50,17 @@ exports.login = (req, res) => {
 
     User.findOne({email: req.body.email}).then(data => {
         bcrypt.compare(req.body.password, data.password).then(next => {
-            User.getToken(data, (userWithToken) => {
+            data.getToken(data, (userWithToken) => {
                 res.send(userWithToken);
             });
         }).catch(err => {
             res.status(400).send({
                 message: "wrong email or password"
-            })
-        })
+            });
+        });
     }).catch(err => {
         res.status(400).send({
             message: "wrong email or password"
         })
     });
-}
+};
