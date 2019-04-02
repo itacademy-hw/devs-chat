@@ -22,8 +22,6 @@ const UserSchema = mongoose.Schema({
     timestamps: true
 });
 
-
-
 UserSchema.methods.getToken = function(user, next) {
     let token = jwt.sign({userId: user._id}, key.appKey);
     next({
@@ -35,7 +33,7 @@ UserSchema.methods.getToken = function(user, next) {
 UserSchema.pre('save', function (next) {
     let user = this;
 
-    bcrypt.hash(user.password, key.appKey).then((hashedPassword) => {
+    bcrypt.hash(user.password, 10).then((hashedPassword) => {
         user.password = hashedPassword;
         next();
     });

@@ -1,8 +1,7 @@
 User = require('../models/User');
+const bcrypt = require('bcrypt');
 
 exports.register = (req, res) => {
-
-    console.log(req.body);
     if(!req.body.email) {
         res.status(400).send({
             message: 'Email is required'
@@ -34,3 +33,34 @@ exports.register = (req, res) => {
         res.status(500).send({message: err});
     });
 };
+
+exports.login = (req, res) => {
+    if(!req.body.email) {
+        res.status(400).send({
+            message: 'Email is required'
+        });
+        return;
+    }
+    if(!req.body.password) {
+        res.status(400).send({
+            message: 'Password is required'
+        });
+        return;
+    }
+
+    User.findOne({email: req.body.email}).then(data => {
+        bcrypt.compare(req.body.password, data.password).then(next => {
+            User.getToken(data, (userWithToken) => {
+                res.send(userWithToken);
+            });
+        }).catch(err => {
+            res.status(400).send({
+                message: "wrong email or password"
+            })
+        })
+    }).catch(err => {
+        res.status(400).send({
+            message: "wrong email or password"
+        })
+    });
+}
