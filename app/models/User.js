@@ -17,7 +17,13 @@ const UserSchema = mongoose.Schema({
         select: false
     },
     user_profile: String,
-    gender: String
+    gender: String,
+    reset_password_token: {
+        type: String
+    },
+    reset_password_expires: {
+        type: Date
+    }
 }, {
     timestamps: true
 });
@@ -35,7 +41,7 @@ UserSchema.methods.getToken = function(user, next) {
 UserSchema.pre('save', function (next) {
     let user = this;
 
-    bcrypt.hash(user.password, key.appKey).then((hashedPassword) => {
+    bcrypt.hash(user.password, 10).then((hashedPassword) => {
         user.password = hashedPassword;
         next();
     });
