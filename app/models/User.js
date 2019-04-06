@@ -29,6 +29,18 @@ UserSchema.methods.getToken = function(user, next) {
     });
 };
 
+UserSchema.methods.compareHash = function(user,next) {
+        bcrypt.compare(req.body.password, user.password).then(next => {
+            data.getToken(user, (userWithToken) => {
+                res.send(userWithToken);
+            });
+        }).catch(err => {
+            res.status(400).send({
+                message: "wrong email or password"
+            });
+        });
+    }
+
 UserSchema.pre('save', function (next) {
     let user = this;
 
