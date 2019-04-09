@@ -49,19 +49,13 @@ exports.login = (req, res) => {
     }
 
     User.findOne({email: req.body.email}).then(data => {
-        let valid = bcrypt.compareSync(req.body.password, data.password);
-        if(valid) {
-            console.log('valid', valid);
-            data.getToken(data, (userWithToken) => {
-                res.send(userWithToken);
-                return;
-            });
-        } else {
+        data.compareHash(req.body.password, function (userWithToken) {
+            res.send(userWithToken);
+        }, function () {
             res.status(400).send({
                 message: "wrong email or password"
             });
-            return;
-        }
+        });
     }).catch(err => {
         res.status(400).send({
             message: "wrong email or password"

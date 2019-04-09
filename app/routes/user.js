@@ -6,7 +6,7 @@ module.exports = (app) => {
      */
     app.post('/user/register', userController.register);
     /**
-     * User loginization
+     * User authorization
      */
     app.post('/user/login', userController.login);
 };

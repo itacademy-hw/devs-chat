@@ -29,25 +29,20 @@ UserSchema.methods.getToken = function(user, next) {
     });
 };
 
-UserSchema.methods.compareHash = function() {
-        let valid = bcrypt.compareSync(req.body.password, data.password);
-        if(valid) {
-            console.log('valid', valid);
-            data.getToken(data, (userWithToken) => {
-                res.send(userWithToken);
-                return;
-            });
-        } else {
-            res.status(400).send({
-                message: "wrong email or password"
-            });
-            return;
-        }
+UserSchema.methods.compareHash = function(password, next, err) {
+    let valid = bcrypt.compareSync(password, this.password);
+    if(valid) {
+        console.log('this', this);
+        this.getToken(this, (userWithToken) => {
+            next(userWithToken);
+        });
+    } else {
+        err('Wrong email or password');
     }
+}
 
 UserSchema.pre('save', function (next) {
     let user = this;
-
     bcrypt.hash(user.password, 10).then((hashedPassword) => {
         user.password = hashedPassword;
         next();
