@@ -1,8 +1,7 @@
 User = require('../models/User');
+const bcrypt = require('bcrypt');
 
 exports.register = (req, res) => {
-
-    console.log(req.body);
     if(!req.body.email) {
         res.status(400).send({
             message: 'Email is required'
@@ -32,5 +31,35 @@ exports.register = (req, res) => {
             res.status(400).send({message: "Email is already exists"});
         }
         res.status(500).send({message: err});
+    });
+};
+
+exports.login = (req, res) => {
+    if(!req.body.email) {
+        res.status(400).send({
+            message: 'Email is required'
+        });
+        return;
+    }
+    if(!req.body.password) {
+        res.status(400).send({
+            message: 'Password is required'
+        });
+        return;
+    }
+
+    User.findOne({email: req.body.email}).then(data => {
+        data.compareHash(req.body.password, function (userWithToken) {
+            res.send(userWithToken);
+        }, function () {
+            res.status(400).send({
+                message: "wrong email or password"
+            });
+        });
+    }).catch(err => {
+        res.status(400).send({
+            message: "wrong email or password"
+        })
+        return;
     });
 };

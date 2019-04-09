@@ -5,5 +5,8 @@ module.exports = (app) => {
      * User registration
      */
     app.post('/user/register', userController.register);
-
+    /**
+     * User authorization
+     */
+    app.post('/user/login', userController.login);
 };
