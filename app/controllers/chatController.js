@@ -5,17 +5,17 @@ exports.createChat = (req, res) => {
     Chat.find({
         $or:[
             {
-                first_member: req.body.user_id
+                first_member: req.body.first_member
             },
             {
-                second_member: req.body.user_id
+                second_member: req.body.first_member
             }
         ]
     }).then(data => {
         if(!data.length) {
             const chat = new Chat({
-                first_member: req.body.user_id,
-                second_member: req.body.reciever_id
+                first_member: req.body.first_member,
+                second_member: req.body.second_member
             });
             chat.save().then(data => {
                 res.send("Chat is successfully created");
