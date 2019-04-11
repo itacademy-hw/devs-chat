@@ -2,12 +2,6 @@ Message = require('../models/Message');
 Chat = require('../models/Chat');
 
 exports.createChat = (req, res) => {
-    if(!req.body.text) {
-        res.status(400).send({
-            message: 'Write something...'
-        });
-        return;
-    }
     Chat.find({
         $or:[
             {
