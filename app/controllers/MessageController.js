@@ -18,7 +18,7 @@ exports.createChat = (req, res) => {
             }
         ]
     }).then(data => {
-        if(data === null) {
+        if(!data.length) {
             const chat = new Chat({
                 first_member: req.body.user_id,
                 second_member: req.body.reciever_id

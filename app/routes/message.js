@@ -4,6 +4,6 @@ module.exports = (app) => {
     /**
      * Chat creating
      */
-    app.post('/user/messages', messageController.createChat);
+    app.post('/chat', messageController.createChat);
 
 };
