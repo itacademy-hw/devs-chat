@@ -32,9 +32,7 @@ exports.createChat = (req, res) => {
     });
 };
 exports.removeChat = (req, res) => {
-    Chat.findById({
-        _id: req.params.id
-    }).then(data => {
+    Chat.findById(req.params.id).then(data => {
         data.delete().then(data => {
             res.send("Chat is successfully deleted")
         })
