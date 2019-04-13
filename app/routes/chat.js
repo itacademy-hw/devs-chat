@@ -5,5 +5,8 @@ module.exports = (app) => {
      * Chat creating
      */
     app.post('/chat', chatController.createChat);
-
+    /**
+     * Chat deleting
+     */
+    app.delete('/chat', chatController.removeChat);
 };
