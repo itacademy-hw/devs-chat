@@ -32,9 +32,8 @@ exports.createChat = (req, res) => {
     });
 };
 exports.removeChat = (req, res) => {
-    Chat.find({
-        first_member: req.body.first_member,
-        second_member: req.body.second_member
+    Chat.findById({
+        _id: req.params.id
     }).then(data => {
         data.delete().then(data => {
             res.send("Chat is successfully deleted")
