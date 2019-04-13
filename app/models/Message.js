@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 const MessSchema = mongoose.Schema ({
     user_id: String,
     reciever_id: String,
-    text: String
+    text: String,
+    chat_id: String
 },
 {
     timestamps: true
