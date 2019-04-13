@@ -3,12 +3,18 @@ Chat = require('../models/Chat');
 
 exports.createChat = (req, res) => {
     Chat.find({
-        $or:[
+        $or: [
             {
-                first_member: req.body.first_member
+                $and: [
+                    { first_member: req.body.first_member },
+                    { second_member: req.body.second_member },
+                ]
             },
             {
-                second_member: req.body.first_member
+                $and: [
+                    { first_member: req.body.second_member },
+                    { second_member: req.body.first_member },
+                ]
             }
         ]
     }).then(data => {
@@ -21,7 +27,7 @@ exports.createChat = (req, res) => {
                 res.send("Chat is successfully created");
             })
         } else {
-            res.send("Chat is already exist")
+            res.send("Chat is already exist");
         }
-    })
-}
+    });
+};
