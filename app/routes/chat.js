@@ -8,5 +8,5 @@ module.exports = (app) => {
     /**
      * Chat deleting
      */
-    app.delete('/chat', ChatController.removeChat);
+    app.delete('/chat/:id', ChatController.removeChat);
 };

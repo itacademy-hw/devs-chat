@@ -32,9 +32,15 @@ exports.createChat = (req, res) => {
     });
 };
 exports.removeChat = (req, res) => {
-    Chat.findById(req.params.id).then(data => {
-        data.delete().then(data => {
-            res.send("Chat is successfully deleted")
-        })
+    Chat.findByIdAndDelete(req.params.id).then(data => {
+        res.send({
+            message: 'Chat was successfully deleted'
+        });
+    }).catch(err => {
+        if(err.kind === 'ObjectId') {
+            res.status(404).send({message: 'Chat was not found with provided id'});
+            return;
+        }
+        res.status(500).send({message: err});
     })
 }
