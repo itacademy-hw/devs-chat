@@ -146,6 +146,32 @@ exports.forgot_password = function(req, res) {
     });
 };
 
+exports.me = (req, res) => {
+    User.findById(req.userId).exec(function(err, user) {
+        if (user) {
+            res.send({
+                me: {
+                    id: user.id,
+                    profile_image: user.profile_image || '',
+                    gender: user.gender || '',
+                    phone: user.phone || '',
+                    dob: user.dob || '',
+                    language: user.language || '',
+                    city: user.city || '',
+                    country: user.country || '',
+                    first_name: user.first_name || '',
+                    last_name: user.last_name || '',
+                    email: user.email || ''
+                }
+            })
+        } else {
+            res.status(400).send({
+                message: 'User not found'
+            });
+        }
+    });
+};
+
 exports.edit_profile = function(req, res) {
     findByIdAndUpdate(req.params.id, {
         first_name: req.body.first_name,
