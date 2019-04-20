@@ -16,12 +16,16 @@ const UserSchema = mongoose.Schema({
         required: true,
         select: false
     },
-    user_profile: String,
-    gender: String
+    profile_image: String,
+    gender: String,
+    phone: String,
+    dob: Date,
+    language: String,
+    city: String,
+    country: String,
 }, {
     timestamps: true
 });
-
 
 
 UserSchema.methods.getToken = function(user, next) {
@@ -35,7 +39,7 @@ UserSchema.methods.getToken = function(user, next) {
 UserSchema.pre('save', function (next) {
     let user = this;
 
-    bcrypt.hash(user.password, key.appKey).then((hashedPassword) => {
+    bcrypt.hash(user.password, 10).then((hashedPassword) => {
         user.password = hashedPassword;
         next();
     });

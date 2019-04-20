@@ -29,8 +29,31 @@ exports.register = (req, res) => {
         });
     }).catch(err => {
         if(err.code === 11000) {
-            res.status(400).send({message: "Email is already exists"});
+            res.status(400).send({message: "Email is already exist"});
+            
         }
         res.status(500).send({message: err});
     });
 };
+
+exports.interlocutor = (req, res) => {
+    User.findById(req.Id).exec(function(err, user){
+        if (user) {
+            res.send({
+                interlocutor: {
+                    profile_image: user.profile_image || '',
+                    city: user.city || '',
+                    country: user.country || '',
+                    phone: user.phone || '',
+                    dob: user.dob || '',
+                    gender: user.gender || '',
+                    language: user.language || '',
+                }
+            })
+        } else {
+            res.status(400).send({
+                message: 'User not found'
+            });
+        }
+    });
+}

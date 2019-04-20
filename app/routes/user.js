@@ -7,3 +7,7 @@ module.exports = (app) => {
     app.post('/user/register', userController.register);
 
 };
+/**
+     * Get interlocutor
+     */
+    app.get('/user/interlocutor', auth.checkToken, userController.interlocutor);
