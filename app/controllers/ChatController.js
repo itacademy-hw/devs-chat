@@ -6,28 +6,32 @@ exports.createChat = (req, res) => {
         $or: [
             {
                 $and: [
-                    { first_member: req.body.first_member },
+                    { first_member: req.userId },
                     { second_member: req.body.second_member },
                 ]
             },
             {
                 $and: [
                     { first_member: req.body.second_member },
-                    { second_member: req.body.first_member },
+                    { second_member: req.userId },
                 ]
             }
         ]
     }).then(data => {
         if(!data.length) {
             const chat = new Chat({
-                first_member: req.body.first_member,
+                first_member: req.userId,
                 second_member: req.body.second_member
             });
             chat.save().then(data => {
-                res.send("Chat is successfully created");
+                res.send({
+                    message: "Chat is successfully created"
+                });
             })
         } else {
-            res.send("Chat is already exist");
+            res.send({
+                message: "Chat is already exist"
+            });
         }
     });
 };
