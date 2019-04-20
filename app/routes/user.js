@@ -16,4 +16,8 @@ module.exports = (app) => {
      */
     app.post('/user/forgot-password', userController.forgot_password);
 
+    /**
+     * User edit profile
+     */
+    app.put('/user/edit-profile', userController.edit_profile)
 };
