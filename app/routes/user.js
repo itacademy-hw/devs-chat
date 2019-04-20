@@ -25,6 +25,6 @@ module.exports = (app) => {
     /**
      * Update me
      */
-    app.put('/user/edit-profile', auth.checkToken, userController.edit_profile());
+    app.put('/user/edit-profile', auth.checkToken, userController.edit_profile);
 
 };

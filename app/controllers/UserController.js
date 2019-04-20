@@ -172,13 +172,8 @@ exports.me = (req, res) => {
     });
 };
 
-exports.edit_profile = function(req, res) {
-    findByIdAndUpdate(req.params.id, {
-        first_name: req.body.first_name,
-        last_name: req.body.last_name,
-        email: req.body.email,
-        gender: req.body.gender
-    }, {new: true}).then(data => {
+exports.edit_profile = (req, res) => {
+    User.findByIdAndUpdate(req.userId, req.body, {new: true}).then(data => {
         res.send(data)
     }).catch(err => {
         if(err.kind === 'ObjectId') {
