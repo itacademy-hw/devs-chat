@@ -145,3 +145,20 @@ exports.forgot_password = function(req, res) {
         return res.status(422).json({ message: err });
     });
 };
+
+exports.edit_profile = function(req, res) {
+    findByIdAndUpdate(req.params.id, {
+        first_name: req.body.first_name,
+        last_name: req.body.last_name,
+        email: req.body.email,
+        gender: req.body.gender
+    }, {new: true}).then(data => {
+        res.send(data)
+    }).catch(err => {
+        if(err.kind === 'ObjectId') {
+            res.status(404).send({message: 'User was not found with provided id'});
+            return;
+        }
+        res.status(500).send({message: err});
+    })
+}
