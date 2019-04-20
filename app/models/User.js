@@ -15,8 +15,13 @@ const UserSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    user_profile: String,
+    profile_image: String,
     gender: String,
+    phone: String,
+    dob: Date,
+    language: String,
+    city: String,
+    country: String,
     reset_password_token: {
         type: String
     },

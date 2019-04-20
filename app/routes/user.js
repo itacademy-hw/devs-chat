@@ -1,5 +1,6 @@
 module.exports = (app) => {
     let userController = require('../controllers/UserController');
+    let auth = require('../middleware/auth');
 
     /**
      * User registration
@@ -15,5 +16,10 @@ module.exports = (app) => {
      * User forgot password
      */
     app.post('/user/forgot-password', userController.forgot_password);
+
+    /**
+     * Get me
+     */
+    app.get('/user/me', auth.checkToken, userController.me);
 
 };
