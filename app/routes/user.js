@@ -1,5 +1,6 @@
 module.exports = (app) => {
     let userController = require('../controllers/UserController');
+    let auth = require('../middleware/auth');
 
     /**
      * User registration
@@ -17,7 +18,8 @@ module.exports = (app) => {
     app.post('/user/forgot-password', userController.forgot_password);
 
     /**
-     * User edit profile
+     * Get me
      */
-    app.put('/user/edit-profile', userController.edit_profile)
+    app.get('/user/me', auth.checkToken, userController.me);
+
 };
