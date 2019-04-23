@@ -13,8 +13,7 @@ const UserSchema = mongoose.Schema({
     },
     password: {
         type: String,
-        required: true,
-        select: false
+        required: true
     },
     profile_image: String,
     gender: String,
@@ -23,10 +22,15 @@ const UserSchema = mongoose.Schema({
     language: String,
     city: String,
     country: String,
+    reset_password_token: {
+        type: String
+    },
+    reset_password_expires: {
+        type: Date
+    }
 }, {
     timestamps: true
 });
-
 
 UserSchema.methods.getToken = function(user, next) {
     let token = jwt.sign({userId: user._id}, key.appKey);
@@ -36,9 +40,20 @@ UserSchema.methods.getToken = function(user, next) {
     });
 };
 
+UserSchema.methods.compareHash = function(password, next, err) {
+    let valid = bcrypt.compareSync(password, this.password);
+    if(valid) {
+        console.log('this', this);
+        this.getToken(this, (userWithToken) => {
+            next(userWithToken);
+        });
+    } else {
+        err('Wrong email or password');
+    }
+}
+
 UserSchema.pre('save', function (next) {
     let user = this;
-
     bcrypt.hash(user.password, 10).then((hashedPassword) => {
         user.password = hashedPassword;
         next();

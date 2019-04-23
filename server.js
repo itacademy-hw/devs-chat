@@ -36,6 +36,7 @@ app.get('/', (req, res) => {
 });
 
 require('./app/routes/user')(app);
+require('./app/routes/chat')(app);
 
 // listen for requests
 app.listen(3000, () => {
