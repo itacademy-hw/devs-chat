@@ -60,7 +60,8 @@ exports.register = (req, res) => {
         });
     }).catch(err => {
         if(err.code === 11000) {
-            res.status(400).send({message: "Email is already exists"});
+            res.status(400).send({message: "Email is already exist"});
+            
         }
         res.status(500).send({message: err});
     });
@@ -162,6 +163,31 @@ exports.me = (req, res) => {
                     first_name: user.first_name || '',
                     last_name: user.last_name || '',
                     email: user.email || ''
+                }
+            })
+        } else {
+            res.status(400).send({
+                message: 'User not found'
+            });
+        }
+    });
+};
+
+exports.get_user = (req, res) => {
+    User.findById(req.params.id).exec(function(err, user) {
+        if (user) {
+            res.send({
+                user: {
+                    profile_image: user.profile_image || '',
+                    city: user.city || '',
+                    country: user.country || '',
+                    email: user.email || '',
+                    phone: user.phone || '',
+                    dob: user.dob || '',
+                    gender: user.gender || '',
+                    language: user.language || '',
+                    first_name: user.first_name || '',
+                    last_name: user.last_name || ''
                 }
             })
         } else {
