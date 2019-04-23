@@ -22,4 +22,9 @@ module.exports = (app) => {
      */
     app.get('/user/me', auth.checkToken, userController.me);
 
+    /**
+     * Update me
+     */
+    app.put('/user/edit-profile', auth.checkToken, userController.edit_profile);
+
 };

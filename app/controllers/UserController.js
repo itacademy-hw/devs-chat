@@ -171,3 +171,15 @@ exports.me = (req, res) => {
         }
     });
 };
+
+exports.edit_profile = (req, res) => {
+    User.findByIdAndUpdate(req.userId, req.body, {new: true}).then(data => {
+        res.send(data)
+    }).catch(err => {
+        if(err.kind === 'ObjectId') {
+            res.status(404).send({message: 'User was not found with provided id'});
+            return;
+        }
+        res.status(500).send({message: err});
+    })
+}
