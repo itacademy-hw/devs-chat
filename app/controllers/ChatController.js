@@ -25,12 +25,14 @@ exports.createChat = (req, res) => {
             });
             chat.save().then(data => {
                 res.send({
-                    message: "Chat is successfully created"
+                    message: "Chat is successfully created",
+                    id: data.id
                 });
             })
         } else {
             res.send({
-                message: "Chat is already exist"
+                message: "Chat is already exist",
+                id: data.id
             });
         }
     });
