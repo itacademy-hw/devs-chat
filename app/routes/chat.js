@@ -11,9 +11,5 @@ module.exports = (app) => {
      * Chat deleting
      */
     app.delete('/chat/:id', auth.checkToken, ChatController.removeChat);
-     /**
-     * Chat getting by id
-     */
-    app.get('/chat/:id', auth.checkToken, MessageController.getCurrentMessage);
 
 };
