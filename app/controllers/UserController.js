@@ -60,7 +60,8 @@ exports.register = (req, res) => {
         });
     }).catch(err => {
         if(err.code === 11000) {
-            res.status(400).send({message: "Email is already exists"});
+            res.status(400).send({message: "Email is already exist"});
+            
         }
         res.status(500).send({message: err});
     });
@@ -171,3 +172,40 @@ exports.me = (req, res) => {
         }
     });
 };
+
+exports.get_user = (req, res) => {
+    User.findById(req.params.id).exec(function(err, user) {
+        if (user) {
+            res.send({
+                user: {
+                    profile_image: user.profile_image || '',
+                    city: user.city || '',
+                    country: user.country || '',
+                    email: user.email || '',
+                    phone: user.phone || '',
+                    dob: user.dob || '',
+                    gender: user.gender || '',
+                    language: user.language || '',
+                    first_name: user.first_name || '',
+                    last_name: user.last_name || ''
+                }
+            })
+        } else {
+            res.status(400).send({
+                message: 'User not found'
+            });
+        }
+    });
+};
+
+exports.edit_profile = (req, res) => {
+    User.findByIdAndUpdate(req.userId, req.body, {new: true}).then(data => {
+        res.send(data)
+    }).catch(err => {
+        if(err.kind === 'ObjectId') {
+            res.status(404).send({message: 'User was not found with provided id'});
+            return;
+        }
+        res.status(500).send({message: err});
+    })
+}
