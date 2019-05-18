@@ -35,6 +35,7 @@ exports.createChat = (req, res) => {
         }
     });
 };
+
 exports.removeChat = (req, res) => {
     Chat.findByIdAndDelete(req.params.id).then(data => {
         res.send({

@@ -10,4 +10,5 @@ const MessSchema = mongoose.Schema ({
     timestamps: true
 });
 
+
 module.exports = mongoose.model('Message', MessSchema);
