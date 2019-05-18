@@ -43,7 +43,7 @@ exports.createMessage = (req, res) => {
     }
     const message = new Message({
         user_id: req.userId,
-        reciever_id: req.userId,
+        reciever_id: req.body.recieverid,
         chat_id: req.body.chat_id,
         text: req.body.text
     });
