@@ -1,5 +1,6 @@
 Message = require('../models/Message');
 Chat = require('../models/Chat');
+User = require('../models/User');
 
 exports.createChat = (req, res) => {
     Chat.find({
@@ -62,8 +63,36 @@ exports.showChats = (req, res) => {
                 second_member: req.userId
             }
         ]
-    }).then(data => res.send(data))
-        .catch(err => {
+    }).then(async (data) => {
+        data = await Promise.all(
+            data.map(async (chat) => {
+                let companionId = '';
+                if(chat.first_member === req.userId) {
+                    companionId = chat.second_member;
+                } else if(chat.second_member === req.userId){
+                    companionId = chat.first_member;
+                }
+                let companion = await User.findById(companionId);
+                //console.log(chat);
+                if(companion) {
+                    return {
+                        id: chat.id,
+                        first_member: chat.first_member,
+                        second_member: chat.second_member,
+                        companion: companion
+                    }
+                } else {
+                    return {
+                        id: chat.id,
+                        first_member: chat.first_member,
+                        second_member: chat.second_member
+                    }
+                }
+            })
+        );
+        console.log(data);
+        res.send(data)
+    }).catch(err => {
             res.status(400).send({
                 message: "Your chat list is empty"
             })
