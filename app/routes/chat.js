@@ -1,6 +1,5 @@
 module.exports = (app) => {
     let ChatController = require('../controllers/ChatController');
-    let MessageController = require('../controllers/MessageController');
     let auth = require('../middleware/auth');
 
     /**
@@ -11,5 +10,9 @@ module.exports = (app) => {
      * Chat deleting
      */
     app.delete('/chat/:id', auth.checkToken, ChatController.removeChat);
+    /**
+     * Show chats
+     */
+    app.get('/chat', auth.checkToken, ChatController.showChats);
 
 };
