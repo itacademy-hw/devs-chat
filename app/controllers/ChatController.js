@@ -73,26 +73,37 @@ exports.showChats = (req, res) => {
                     companionId = chat.first_member;
                 }
                 let companion = await User.findById(companionId);
-                //console.log(chat);
+                let last_message = await Message.findOne({
+                    chat_id: chat.id
+                }).sort([['createdAt', -1]]);
+                console.log(last_message);
                 if(companion) {
                     return {
                         id: chat.id,
                         first_member: chat.first_member,
                         second_member: chat.second_member,
+                        last_message: {
+                            text: last_message.text,
+                            createdAt: last_message.createdAt
+                        },
                         companion: companion
                     }
                 } else {
                     return {
                         id: chat.id,
                         first_member: chat.first_member,
-                        second_member: chat.second_member
+                        second_member: chat.second_member,
+                        last_message: {
+                            text: last_message.text,
+                            createdAt: last_message.createdAt
+                        }
                     }
                 }
             })
         );
-        console.log(data);
         res.send(data)
     }).catch(err => {
+        console.log(err);
             res.status(400).send({
                 message: "Your chat list is empty"
             })
