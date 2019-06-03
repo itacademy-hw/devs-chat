@@ -51,17 +51,14 @@ exports.removeChat = (req, res) => {
         }
         res.status(500).send({message: err});
     })
+    console.log('smth');
 }
 
 exports.showChats = (req, res) => {
     Chat.find({
         $or: [
-            {
-                first_member: req.userId
-            },
-            {
-                second_member: req.userId
-            }
+            {first_member: req.userId},
+            {second_member: req.userId}
         ]
     }).then(async (data) => {
         data = await Promise.all(
@@ -76,7 +73,12 @@ exports.showChats = (req, res) => {
                 let last_message = await Message.findOne({
                     chat_id: chat.id
                 }).sort([['createdAt', -1]]);
-                console.log(last_message);
+                if(!last_message) {
+                    last_message = {
+                        text: '',
+                        createdAt: ''
+                    }
+                }
                 if(companion) {
                     return {
                         id: chat.id,
