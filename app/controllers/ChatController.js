@@ -1,5 +1,6 @@
 Message = require('../models/Message');
 Chat = require('../models/Chat');
+User = require('../models/User');
 
 exports.createChat = (req, res) => {
     Chat.find({
@@ -50,20 +51,61 @@ exports.removeChat = (req, res) => {
         }
         res.status(500).send({message: err});
     })
+    console.log('smth');
 }
 
 exports.showChats = (req, res) => {
     Chat.find({
         $or: [
-            {
-                first_member: req.userId
-            },
-            {
-                second_member: req.userId
-            }
+            {first_member: req.userId},
+            {second_member: req.userId}
         ]
-    }).then(data => res.send(data))
-        .catch(err => {
+    }).then(async (data) => {
+        data = await Promise.all(
+            data.map(async (chat) => {
+                let companionId = '';
+                if(chat.first_member === req.userId) {
+                    companionId = chat.second_member;
+                } else if(chat.second_member === req.userId){
+                    companionId = chat.first_member;
+                }
+                let companion = await User.findById(companionId);
+                let last_message = await Message.findOne({
+                    chat_id: chat.id
+                }).sort([['createdAt', -1]]);
+                if(!last_message) {
+                    last_message = {
+                        text: '',
+                        createdAt: ''
+                    }
+                }
+                if(companion) {
+                    return {
+                        id: chat.id,
+                        first_member: chat.first_member,
+                        second_member: chat.second_member,
+                        last_message: {
+                            text: last_message.text,
+                            createdAt: last_message.createdAt
+                        },
+                        companion: companion
+                    }
+                } else {
+                    return {
+                        id: chat.id,
+                        first_member: chat.first_member,
+                        second_member: chat.second_member,
+                        last_message: {
+                            text: last_message.text,
+                            createdAt: last_message.createdAt
+                        }
+                    }
+                }
+            })
+        );
+        res.send(data)
+    }).catch(err => {
+        console.log(err);
             res.status(400).send({
                 message: "Your chat list is empty"
             })

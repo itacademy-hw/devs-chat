@@ -32,4 +32,14 @@ module.exports = (app) => {
      */
     app.put('/user/edit-profile', auth.checkToken, userController.edit_profile);
 
+    /**
+     * Search
+     */
+    app.get('/user/search/:search?', auth.checkToken, userController.search);
+
+    /**
+     * Get companion from chat id
+     */
+    app.get('/user/:chat_id', auth.checkToken, userController.get_companion);
+
 };
