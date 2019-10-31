@@ -15,7 +15,7 @@
     "express": "^4.16.3",
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.2.2",
-    "mongoose": "^5.2.8",
+    "mongoose": "^5.7.5",
     "nodemailer": "^4.0.1",
     "nodemailer-express-handlebars": "^2.0.0"
   },
